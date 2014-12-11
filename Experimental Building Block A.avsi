@@ -1,5 +1,5 @@
 Function GetVectors (clip search, clip "supersearch", 
-         \           int "tr", int "pel", int "blksize", int "dct", int "thsad", tring "vccs", bool "tv_range")
+         \           int "tr", int "pel", int "blksize", int "dct", int "thsad", string "vccs", bool "tv_range")
 {
     supersearch = Default (supersearch, UnDefined ())
     tr          = Default (tr, 6)
