@@ -1,7 +1,8 @@
-Function DenoiseComp16 (clip input, clip "superclip", clip "vclip", int "tr", int "thsad", bool "tv_range")
+Function DenoiseComp16 (clip input, clip "superclip", clip "vclip", int "pel", int "tr", int "thsad", bool "tv_range")
 {
     superclip  = Default (superclip, UnDefined ())
     vclip      = Default (vclip, UnDefined ())
+    pel        = Default (pel, 4)
     tr         = Default (tr, 6)
     thsad      = Default (thsad, 400)
     tv_range   = Default (tv_range, True)
@@ -70,11 +71,12 @@ Function CompNLMeans16 (clip comp, clip "repclip", int "tr",
     return Rep
 }
 
-Function MBlur16 (clip input, clip "blur", clip "superclip", clip "vclip", int "tr", int "thsad", int "repmode", int "repmodeu", int "repmodev", bool "tv_range")
+Function MBlur16 (clip input, clip "blur", clip "superclip", clip "vclip", int "pel", int "tr", int "thsad", int "repmode", int "repmodeu", int "repmodev", bool "tv_range")
 {
     blur       = Default (blur, UnDefined ())
     superclip  = Default (superclip, UnDefined ())
     vclip      = Default (vclip, UnDefined ())
+    pel        = Default (pel, 4)
     tr         = Default (tr, 6)
     thsad      = Default (thsad, 1200)
     repmode    = Default (repmode, 16)
