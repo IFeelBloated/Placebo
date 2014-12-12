@@ -1,5 +1,5 @@
 Function SharpCalmer16 (clip input, clip "dif", clip "limit", clip "superclip", clip "superdif", clip "superlimit", clip "vclip", clip "repclip",
-         \              int "tr", int "thsad", int "repmode", int "repmodeu", int "repmodev",
+         \              int "pel", int "tr", int "thsad", int "repmode", int "repmodeu", int "repmodev",
          \              float "str", bool "tv_range")
 {
     dif        = Default (dif, UnDefined ())
@@ -9,6 +9,7 @@ Function SharpCalmer16 (clip input, clip "dif", clip "limit", clip "superclip", 
     superlimit = Default (superlimit, UnDefined ())
     vclip      = Default (vclip, UnDefined ())
     repclip    = Default (repclip, dif)
+    pel        = Default (pel, 4)
     tr         = Default (tr, 6)
     thsad      = Default (thsad, 400)
     repmode    = Default (repmode, 13)
