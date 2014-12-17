@@ -954,12 +954,6 @@ del /f /s /q *.lwi
 
 
 
-
-
-
-
-
-
 ECHO LWLibAVVideoSource ("sharpr.mp4") > temp.avs
 ECHO converttoy8 () >> temp.avs
 ECHO MinBlur16 (radius=1) >> temp.avs
@@ -995,4 +989,23 @@ call x264.exe --output Minblur.mp4 --preset ultrafast --qp 0 temp.avs
 del temp.avs
 del superclip.mp4
 del vmultit.mp4
+del /f /s /q *.lwi
+
+
+
+
+
+
+
+
+
+
+ECHO LWLibAVVideoSource ("sharpr.mp4") > temp.avs
+ECHO minblur=LWLibAVVideoSource ("Minblur.mp4") >> temp.avs
+ECHO detect=LWLibAVVideoSource ("Minblur.mp4") >> temp.avs
+ECHO HaloCancelation16 (minblur=minblur, detect=detect, RGB=False, a1=16, a2=96, a3=128, radius=4, output=True, tv_range=False) >> temp.avs
+call x264.exe --output sharp.mp4 --preset ultrafast --qp 0 temp.avs
+del temp.avs
+del Minblur.mp4
+del sharpr.mp4
 del /f /s /q *.lwi
