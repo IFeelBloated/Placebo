@@ -46,26 +46,29 @@ Function SharpCalmer16 (clip input, clip "dif", clip "limit", clip "superclip", 
     return SLimit
 }
 
-Function HaloCancelation16 (clip sharp, clip "minblur", clip "detect", bool "RGB", int "a1", int "a2", int "a3", int "radius", bool "output", bool "tv_range")
+Function HaloCancelation16 (clip sharp, clip "source", clip "minblur", clip "detect", int "a1", int "a2", int "a3", int "radius", int "mthr", bool "tv_range")
 {
+    source   = Default (source, UnDefined ())
     minblur  = Default (minblur, UnDefined ())
     detect   = Default (detect, UnDefined ())
-    RGB      = Default (RGB, False)
     a1       = Default (a1, 16)
     a2       = Default (a2, 96)
     a3       = Default (a3, 128)
     radius   = Default (radius, 4)
-    output   = Default (output, True)
+    mthr     = Default (mthr, 60)
     tv_range = Default (tv_range, True)
 
     detect.Round8 (tv_range=tv_range)
     EM       = TEMMod (ThreshY=0, type=1).mt_lut ("x "+String (a1)+" "+String (a3)+" / 255 * - 4 *")
     EEM      = EM.mt_expand ().mt_lut ("x "+String (a2)+" "+String (a3)+" / 255 * - 4 *")
     RM       = mt_lutxy (EEM, EM, "x y -").mt_xxflate_multi (mode="inflate", radius=radius).
-             \ mt_lut ("x "+String (a1)+" "+String (a3)+" / 255 * - 4 *")
-    Mask     = RGB ? Interleave (RM.Grayscale (), RM.Grayscale (), RM.Grayscale ()) : RM.Grayscale ()
+             \ mt_lut ("x "+String (a1)+" "+String (a3)+" / 255 * - 4 *").Grayscale ()
+    RMask1   = mt_logic (sharp.RMask1_16_8 (mthr=mthr, tv_range=tv_range), source.RMask1_16_8 (mthr=mthr, tv_range=tv_range), "max")
+    RMask2   = mt_logic (sharp.RMask2_16_8 (tv_range=tv_range), source.RMask2_16_8 (tv_range=tv_range), "max")
+    Mask     = mt_logic (RM, RMask1, "min").mt_logic (RMask2, "min")
+    dr       = minblur.Dither_limit_dif16 (sharp, thr=12.0, elast=3.00, y=3, u=3, v=3)
 
-    return output ? Dither_Merge16_8 (sharp, minblur, Mask, luma=True, y=3, u=3, v=3) : Mask
+    return Dither_Merge16_8 (sharp, dr, Mask, luma=True, y=3, u=3, v=3)
 }
 
 Function mt_xxflate_multi (clip input, string "mode", int "radius", int "a")
