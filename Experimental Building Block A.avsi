@@ -14,7 +14,7 @@ Function GetVectors (clip search, clip "supersearch",
 
     supersoft   = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=4, levels=0)
     supersharp  = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=2, levels=0)
-    vmulti      = supersoft.MAnalyse (multi=True, overlap=16, blksize=32, search=3, chroma=True, truemotion=True, delta=tr,
+    vmulti      = supersoft.MAnalyse (multi=True, overlap=16, blksize=32, search=3, chroma=True, truemotion=True, delta=tr, trymany=True,
                            \          searchparam=16, pelsearch=16, dct=dct, levels=0, divide=2, badrange=-24)
     vmulti      = supersoft.MRecalculate (vmulti, overlap=8, blksize=16, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=2)
     vmulti      = supersharp.MRecalculate (vmulti, overlap=4, blksize=8, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=2)
