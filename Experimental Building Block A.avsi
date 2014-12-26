@@ -1,29 +1,24 @@
 Function GetVectors (clip search, clip "supersearch", 
-         \           int "tr", int "pel", int "blksize", int "dct", int "thsad", string "vccs", bool "tv_range")
+         \           int "tr", int "pel", int "dct", int "thsad", string "vccs", bool "tv_range")
 {
     supersearch = Default (supersearch, UnDefined ())
     tr          = Default (tr, 6)
     pel         = Default (pel, 4)
-    blksize     = Default (blksize, 4)
     dct         = Default (dct, 1)
     thsad       = Default (thsad, 400)
     vccs        = Default (vccs, "yv16")
     tv_range    = Default (tv_range, True)
 
-    overlap    = blksize/2
-    blksizer   = blksize <= 4 ? blksize : blksize/2
-    overlapr   = blksizer/2
-    divide     = blksize <= 4 ? 0 : 2
-    divider    = blksizer <= 4 ? 0 : 2
-
     search      = search.TComp (tr=tr)
     supersearch = supersearch.TComp (tr=tr)
 
-    supervec    = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=4, levels=0)
-    superrecal  = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=2, levels=0)
-    vmulti      = supervec.MAnalyse (multi=True, overlap=overlap, blksize=blksize, search=3, chroma=True, truemotion=True, delta=tr,
-                           \         searchparam=16, pelsearch=16, dct=dct, levels=0, divide=divide, badrange=-24)
-    vmulti      = superrecal.MRecalculate (vmulti, overlap=overlapr, blksize=blksizer, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=divider)
+    supersoft   = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=4, levels=0)
+    supersharp  = search.Round8 (tv_range=tv_range).MSuper (pel=pel, chroma=True, hpad=16, vpad=16, pelclip=supersearch.Round8 (tv_range=tv_range), sharp=2, rfilter=2, levels=0)
+    vmulti      = supersoft.MAnalyse (multi=True, overlap=16, blksize=32, search=3, chroma=True, truemotion=True, delta=tr,
+                           \          searchparam=16, pelsearch=16, dct=dct, levels=0, divide=2, badrange=-24)
+    vmulti      = supersoft.MRecalculate (vmulti, overlap=8, blksize=16, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=2)
+    vmulti      = supersharp.MRecalculate (vmulti, overlap=4, blksize=8, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=2)
+    vmulti      = supersharp.MRecalculate (vmulti, overlap=2, blksize=4, thsad=thsad/2, chroma=True, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=0)
 
     return vccs == "yv16" ? MStoreVect (vmulti, vccs="yuy2").converttoyv16 () : MStoreVect (vmulti, vccs=vccs)
 }
