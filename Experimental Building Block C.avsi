@@ -79,7 +79,7 @@ Function MBlur16 (clip input, clip "blur", clip "superclip", clip "vclip", int "
     pel        = Default (pel, 4)
     tr         = Default (tr, 6)
     thsad      = Default (thsad, 1200)
-    repmode    = Default (repmode, 16)
+    repmode    = Default (repmode, 1)
     repmodeu   = Default (repmodeu, repmode)
     repmodev   = Default (repmodev, repmode)
     tv_range   = Default (tv_range, True)
