@@ -30,7 +30,7 @@ Function CompDfttest16 (clip comp, clip "repclip", int "tr",
     repclip    = Default (repclip, UnDefined ())
     tr         = Default (tr, 6)
     sstring    = Default (sstring, "0.0:4.0 0.48:2.0 0.64:0.5 1.0:0.25")
-    sbsize     = Default (sbsize, 33)
+    sbsize     = Default (sbsize, 65)
     repmode    = Default (repmode, 13)
     repmodeu   = Default (repmodeu, repmode)
     repmodev   = Default (repmodev, repmode)
@@ -38,34 +38,6 @@ Function CompDfttest16 (clip comp, clip "repclip", int "tr",
 
     NR         = comp.Convert8to16 (tv_range=tv_range).Dfttest (lsb_in=true, lsb=true, sstring=sstring, sbsize=sbsize, sosize=0, smode=0, tosize=0, tbsize=tr*2+1, tmode=0, y=true, u=true, v=true)
                                                      \.SelectEvery (tr*2+1, tr).TTrim (tr=tr)
-    Rep        = NR.Dither_repair16 (repclip, mode=repmode, modeu=repmodeu, modev=repmodev)
-
-    return Rep
-}
-
-Function CompNLMeans16 (clip comp, clip "repclip", int "tr",
-         \              int "ax", int "ay", int "sx", int "sy", int "bx", int "by", float "a", float "h",
-         \              int "repmode", int "repmodeu", int "repmodev",
-         \              bool "tv_range")
-{
-    repclip    = Default (repclip, UnDefined ())
-    tr         = Default (tr, 6)
-    ax         = Default (ax, 8)
-    ay         = Default (ay, 8)
-    sx         = Default (sx, 4)
-    sy         = Default (sy, 4)
-    bx         = Default (bx, 0)
-    by         = Default (by, 0)
-    a          = Default (a, 1.0)
-    h          = Default (h, 1.8)
-    repmode    = Default (repmode, 13)
-    repmodeu   = Default (repmodeu, repmode)
-    repmodev   = Default (repmodev, repmode)
-    tv_range   = Default (tv_range, True)
-
-    NR         = comp.TNLMeans (ax=ax, ay=ay, az=tr, sx=sx, sy=sy, bx=bx, by=by, ms=False, rm=0, a=a, h=h, sse=True)
-                    \.SelectEvery (tr*2+1, tr).TTrim (tr=tr)
-                    \.Convert8to16 (tv_range=tv_range)
     Rep        = NR.Dither_repair16 (repclip, mode=repmode, modeu=repmodeu, modev=repmodev)
 
     return Rep
