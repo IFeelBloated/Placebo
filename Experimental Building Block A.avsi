@@ -11,8 +11,8 @@ Function GetVectors (clip search, clip "supersearch",
     search      = search.TComp (tr=tr).YTo420_16 ()
     supersearch = supersearch.TComp (tr=tr).ConvertToYV12 ()
 
-    supersoft   = search.Round8 (False).MSuper (pel=pel, chroma=False, hpad=0, vpad=0, pelclip=supersearch, sharp=2, rfilter=4, levels=0)
-    supersharp  = search.Round8 (False).MSuper (pel=pel, chroma=False, hpad=0, vpad=0, pelclip=supersearch, sharp=2, rfilter=2, levels=0)
+    supersoft   = search.Round8 (False).MSuper (pel=pel, chroma=False, hpad=32, vpad=32, pelclip=supersearch, sharp=2, rfilter=4, levels=0)
+    supersharp  = search.Round8 (False).MSuper (pel=pel, chroma=False, hpad=32, vpad=32, pelclip=supersearch, sharp=2, rfilter=2, levels=0)
     vmulti      = supersoft.MAnalyse (multi=True, overlap=16, blksize=32, search=3, chroma=False, truemotion=True, delta=tr, trymany=True,
                            \          searchparam=16, pelsearch=16, dct=dct, levels=0, divide=2, badrange=-24)
     vmulti      = supersoft.MRecalculate (vmulti, overlap=8, blksize=16, thsad=thsad/2, chroma=False, truemotion=True, tr=tr, search=3, searchparam=16, dct=dct, smooth=1, divide=2)
@@ -274,3 +274,4 @@ Function Padding (clip input, int "left", int "top", int "right", int "bottom")
 
     return output
 }
+
